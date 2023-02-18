@@ -7,6 +7,13 @@ export default function Home() {
   const [result, setResult] = useState();
 
   async function onSubmit(event) {
+    const userPrompt = {
+      q1: 9,
+      q2: 65,
+      q3: "Yes, but team was ignorant regarding all of my efforts ",
+      q4: "I played a major role in scaling accounts ",
+      q5: `I don't think, I would have done more`,
+    };
     event.preventDefault();
     try {
       const response = await fetch("/api/generate", {
@@ -14,17 +21,20 @@ export default function Home() {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ animal: animalInput }),
+        body: JSON.stringify(userPrompt),
       });
 
       const data = await response.json();
       if (response.status !== 200) {
-        throw data.error || new Error(`Request failed with status ${response.status}`);
+        throw (
+          data.error ||
+          new Error(`Request failed with status ${response.status}`)
+        );
       }
 
       setResult(data.result);
       setAnimalInput("");
-    } catch(error) {
+    } catch (error) {
       // Consider implementing your own error handling logic here
       console.error(error);
       alert(error.message);
